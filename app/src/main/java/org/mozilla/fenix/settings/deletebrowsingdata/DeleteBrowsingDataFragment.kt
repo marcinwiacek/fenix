@@ -153,7 +153,7 @@ class DeleteBrowsingDataFragment : Fragment(R.layout.fragment_delete_browsing_da
         if (popAfter) viewLifecycleOwner.lifecycleScope.launch(
             Dispatchers.Main
         ) {
-            findNavController().popBackStack(R.id.homeFragment, false)
+            returnToDeletionOrigin()
         }
     }
 
@@ -238,6 +238,34 @@ class DeleteBrowsingDataFragment : Fragment(R.layout.fragment_delete_browsing_da
             fragmentView.cached_files_item,
             fragmentView.site_permissions_item
         )
+    }
+    // If coming from Open Tab -> Settings, pop back to Home
+    // If coming from Home -> Settings, pop back to Settings
+    private fun returnToDeletionOrigin() {
+        if (checkIfBrowserFragmentInBackStack()) findNavController().popBackStack(R.id.homeFragment, false)
+        else findNavController().popBackStack()
+    }
+
+    // For some reason, the only way you can tell if you came from
+    // BrowserFrag -> Settings OR BrowserFrag -> HomeFrag -> Settings is to check whether
+    // there is a browser fragment entry in the back stack. If there is, it means you came from BrowserFrag -> Settings
+    // if there isn't, it means you came from HomeFrag -> Settings
+    private fun checkIfBrowserFragmentInBackStack(): Boolean {
+        val backStackEC = parentFragmentManager.backStackEntryCount
+        val index = backStackEC - 1
+
+        for (i in 0..index) {
+            if (getResIdFromBackstack(parentFragmentManager.getBackStackEntryAt(i).name) == R.id.browserFragment) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private fun getResIdFromBackstack(name: String?): Int {
+        val idString = name?.split("-")
+        return idString!![1].toInt()
     }
 
     companion object {
