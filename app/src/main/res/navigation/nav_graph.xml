@@ -397,6 +397,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_toolbarSettingsFragment"
             app:destination="@id/toolbarSettingsFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_addonsFragment"
+            app:destination="@id/addonsFragment" />
     </fragment>
     <fragment
         android:id="@+id/dataChoicesFragment"
@@ -682,4 +685,8 @@
         android:id="@+id/toolbarSettingsFragment"
         android:name="org.mozilla.fenix.settings.ToolbarSettingsFragment"
         android:label="ToolbarSettingsFragment" />
+    <fragment
+        android:id="@+id/addonsFragment"
+        android:name="org.mozilla.fenix.addons.AddonsFragment"
+        android:label="Add-ons manager" />
 </navigation>
